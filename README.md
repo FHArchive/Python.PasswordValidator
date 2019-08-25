@@ -1,7 +1,7 @@
 <p float="left">
 <img src="https://img.shields.io/github/languages/top/fredhappyface/Python.PasswordValidator.svg?style=flat-square" alt="Github top language">
-<img src="https://img.shields.io/codacy/grade/codacyid.svg?style=flat-square" alt="Codacy grade">
-<img src="https://img.shields.io/codacy/coverage/codacyid.svg?style=flat-square" alt="Codacy coverage">
+<img src="https://img.shields.io/codacy/grade/4cf5de897f4543c8987990d23c25cec0.svg?style=flat-square" alt="Codacy grade">
+<img src="https://img.shields.io/codacy/coverage/4cf5de897f4543c8987990d23c25cec0.svg?style=flat-square" alt="Codacy coverage">
 <img src="https://img.shields.io/github/repo-size/fredhappyface/Python.PasswordValidator.svg?style=flat-square" alt="Repository size">
 <img src="https://img.shields.io/github/issues/fredhappyface/Python.PasswordValidator.svg?style=flat-square" alt="Issues">
 <img src="https://img.shields.io/github/license/fredhappyface/Python.PasswordValidator.svg?style=flat-square" alt="License">
