@@ -1,0 +1,22 @@
+{
+    "COMMENT": "used https://wpengine.com/unmasked/ to decide most values ",
+    "minLength": 11,
+    "weakSymbols": ["!", "@", ".", "?"],
+    "weakNumbers": [1, 2, 3, 12, 7, 5, 4, 6, 9, 8],
+
+    "suggestions": {
+        "weakPskSuggestion": "Your password could be improved by using a password generation tool",
+
+        "underMinLength": "Increase the length of your password",
+        "lettersOnly": "Add numbers and symbols",
+        "lettersAndNumbersOnly": "Add symbols",
+        "weakSymbols": "You have only used weak symbols! Consider using stronger ones",
+        "weakNumbers": "You have used a weak number",
+        "commonPasswordInPassword": "Your password includes a common password which could increase the chance of having it broken"
+    },
+
+    "maxScore": 6,
+
+    "minLengthRes": 5,
+    "maxLengthRes": 20
+}
