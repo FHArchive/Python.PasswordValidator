@@ -1,8 +1,9 @@
 {
-    "COMMENT": "copy of config from main ",
+    "COMMENT": "used https://wpengine.com/unmasked/ to decide most values ",
     "minLength": 11,
     "weakSymbols": ["!", "@", ".", "?"],
     "weakNumbers": [1, 2, 3, 12, 7, 5, 4, 6, 9, 8],
+    "entropy": 3.5,
 
     "suggestions": {
         "weakPskSuggestion": "Your password could be improved by using a password generation tool",
@@ -12,7 +13,8 @@
         "lettersAndNumbersOnly": "Add symbols",
         "weakSymbols": "You have only used weak symbols! Consider using stronger ones",
         "weakNumbers": "You have used a weak number",
-        "commonPasswordInPassword": "Your password includes a common password which could increase the chance of having it broken"
+        "commonPasswordInPassword": "Your password includes a common password which could increase the chance of having it broken",
+        "lowEntropy": "Your password has a low entropy, add a greater range or characters "
     },
 
     "maxScore": 6,

@@ -11,16 +11,17 @@ THISDIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()
 sys.path.insert(0, os.path.dirname(THISDIR) + "/lib")
 
 import fileIO
+import math
 
 CONFIG = "config.json"
 RES = "res/"
 PASSWORDS = "validatePasswords.txt"
 
-MIN_LENGTH, WEAK_SYMBOLS, WEAK_NUMBERS, SUGGESTIONS, MAX_SCORE = "", "", "", "", ""
+MIN_LENGTH, WEAK_SYMBOLS, WEAK_NUMBERS, SUGGESTIONS, MIN_LENGTH_RES, MAX_LENGTH_RES, ENTROPY_THRESHOLD = "", "", "", "", "", "", 0
 
 def readConfig():
     data = fileIO.readJSON(fileIO.genFileName([THISDIR, CONFIG]))
-    return data["minLength"], data["weakSymbols"], data["weakNumbers"], data["suggestions"], data["maxScore"], data["minLengthRes"], data["maxLengthRes"]
+    return data["minLength"], data["weakSymbols"], data["weakNumbers"], data["suggestions"], data["minLengthRes"], data["maxLengthRes"], data["entropy"]
 
 def passwordValidator(password):
     score = 0
@@ -41,13 +42,15 @@ def passwordValidator(password):
     # Common Numbers
     score += 1
     for number in WEAK_NUMBERS:
-        nextPos = password.find(str(number)) + 1
-        if nextPos >= len(password):
-            return score, SUGGESTIONS["weakNumbers"], str(number)
-        if nextPos != 0:
-            if charInPassword(password[nextPos], [('!', '/'), (':', '@'), ('A', 'Z'), ('[', '`'), ('a', 'z'), ('{', '~')]):
+        pos = password.find(str(number))
+        adjacentNumber = False
+        if pos != -1:
+            if (pos + 1) < len(password) and charInPassword(password[pos + 1], [('0', '9')]):
+                adjacentNumber = True
+            if (pos -1) > -1 and charInPassword(password[pos - 1], [('0', '9')]):
+                adjacentNumber = True
+            if not adjacentNumber:
                 return score, SUGGESTIONS["weakNumbers"], str(number)
-
 
     # Common Symbols
     score += 1
@@ -56,6 +59,11 @@ def passwordValidator(password):
         asciiRange.append((symbol, symbol))
     if charInPassword(password, asciiRange):
         return score, SUGGESTIONS["weakSymbols"], ""
+
+    # Shannon entropy below threshold
+    score += 1
+    if shannonEntropy(password) < ENTROPY_THRESHOLD:
+        return score, SUGGESTIONS["lowEntropy"], ""
 
     # Common Passwords in Password
     score += 1
@@ -67,7 +75,8 @@ def passwordValidator(password):
                 if password.lower().find(commonPassword.rstrip().lower()) > -1:
                     return score, SUGGESTIONS["commonPasswordInPassword"], commonPassword[:-1]
 
-    return MAX_SCORE, "Max Score", ""
+    score += 1
+    return score, "Max Score", ""
 
 def charInPassword(password, asciiRange):
     for char in password:
@@ -87,11 +96,20 @@ def onlyCharsInPassword(password, asciiRange):
 
 
 '''
+Calculates the shannon entropy. Better passwords will have a better
+shannon entropy
+'''
+def shannonEntropy(string):
+    probChars = [float(string.count(char)) / len(string) for char in dict.fromkeys(list(string))]
+    return - sum([probChar * math.log(probChar) / math.log(2.0) for probChar in probChars])
+
+
+'''
 Global variables are either block caps eg MIN_LENGTH or preceded with g_ eg
 g_score
 '''
 if __name__ == "__main__": # pragma: no cover
-    MIN_LENGTH, WEAK_SYMBOLS, WEAK_NUMBERS, SUGGESTIONS, MAX_SCORE, MIN_LENGTH_RES, MAX_LENGTH_RES = readConfig()
+    MIN_LENGTH, WEAK_SYMBOLS, WEAK_NUMBERS, SUGGESTIONS, MIN_LENGTH_RES, MAX_LENGTH_RES, ENTROPY_THRESHOLD = readConfig()
     g_passwordTokens = fileIO.fileToTokens(fileIO.genFileName([THISDIR, PASSWORDS]))
     for g_password in g_passwordTokens:
         pskClean = g_password.rstrip()

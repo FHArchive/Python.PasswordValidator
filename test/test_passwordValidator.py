@@ -8,7 +8,6 @@ import fileIO
 import passwordValidator
 
 
-
 '''
 Test functions in passwordValidator.py
 '''
@@ -17,12 +16,13 @@ testPwd = "ThisIsaTest1234.,@!"
 
 passwordValidator.THISDIR = THISDIR
 passwordValidator.CONFIG = "testConfig.json"
-passwordValidator.MIN_LENGTH, passwordValidator.WEAK_SYMBOLS, passwordValidator.WEAK_NUMBERS, passwordValidator.SUGGESTIONS, passwordValidator.MAX_SCORE, passwordValidator.MIN_LENGTH_RES, passwordValidator.MAX_LENGTH_RES = passwordValidator.readConfig()
+
+passwordValidator.MIN_LENGTH, passwordValidator.WEAK_SYMBOLS, passwordValidator.WEAK_NUMBERS, passwordValidator.SUGGESTIONS,  passwordValidator.MIN_LENGTH_RES, passwordValidator.MAX_LENGTH_RES, passwordValidator.ENTROPY_THRESHOLD = passwordValidator.readConfig()
 
 
 def test_readConfig():
     passwordValidator.CONFIG = "testConfig.json"
-    minLength, weakSymbols, weakNumbers, suggestions, maxScore, minLengthRes, maxLengthRes = passwordValidator.readConfig()
+    minLength, weakSymbols, weakNumbers, suggestions, minLengthRes, maxLengthRes, entropyThreshold = passwordValidator.readConfig()
     assert(minLength == 11)
 
 
@@ -119,14 +119,35 @@ def test_passwordValidatorCommonSymbols():
     assert(passwordValidator.passwordValidator("Hellotherethisisfred10!")[0] == 4)
 
 
-def test_passwordValidatorCommonPasswords():
-    assert(passwordValidator.passwordValidator("Hellotherethisisfred10~")[0] == 5)
+def test_passwordValidatorLowEntropy():
+    assert(passwordValidator.passwordValidator("H33~l00th33r33th11s~sfr33d10~")[0] == 5)
 
+
+def test_passwordValidatorCommonPasswords():
+    assert(passwordValidator.passwordValidator("Hellotherethisisfred10~")[0] == 6)
 
 
 def test_passwordValidatorMax():
-    assert(passwordValidator.passwordValidator("H33~l00th33r33th11s~sfr33d10~")[0] == 6)
+    assert(passwordValidator.passwordValidator("gYF22gJM93X84QzRpDOx&rgCpFWYMBYG$g86%rzY04opBjBWYfq46#$47Raxlm39U")[0] == 7)
 
 
 def test_passwordValidatorCommonNumberAtEnd():
     assert(passwordValidator.passwordValidator("Hellotherethisisfred~1")[0] == 3)
+
+def test_shannonEntropy0():
+    assert(int(passwordValidator.shannonEntropy('a')) == 0)
+
+def test_shannonEntropy1():
+    assert(int(passwordValidator.shannonEntropy('ab')) == 1)
+
+def test_shannonEntropy2():
+    assert(int(passwordValidator.shannonEntropy('abcd')) == 2)
+
+def test_shannonEntropy3():
+    assert(int(passwordValidator.shannonEntropy('abcdefgh')) == 3)
+
+def test_shannonEntropy4():
+    assert(int(passwordValidator.shannonEntropy('abcdefghijklmnop')) == 4)
+
+def test_shannonEntropy5():
+    assert(int(passwordValidator.shannonEntropy('abcdefghijklmnopABCDEFGHIJKLMNOP')) == 5)
