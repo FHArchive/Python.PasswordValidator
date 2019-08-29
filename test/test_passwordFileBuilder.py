@@ -26,13 +26,11 @@ def test_passwordFileBuilder2():
     assert(sum(1 for line in open(RES + "passwords1.txt")) == 2)
 
 
-
 # Again, if this passes, it can be assumed this will be accurate for other values
 def test_passwordFileBuilder20():
     passwordFileBuilder.RES_IN = "resIn20"
     passwordFileBuilder.passwordFileBuilder()
     assert(sum(1 for line in open(RES + "passwords1.txt")) == 22)
-
 
 
 
