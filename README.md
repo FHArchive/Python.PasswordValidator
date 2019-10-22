@@ -63,7 +63,7 @@ version.
 2. Run by pressing F5 or by selecting Run> Run Module
 
 ## How to test
-```
+```cmd
 py.test test\test_passwordFileBuilder.py --cov=main && py.test test\test_passwordValidator.py --cov=main --cov-append
 ```
 
